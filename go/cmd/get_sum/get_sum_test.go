@@ -19,7 +19,7 @@ func TestGetSum(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		testName := fmt.Sprintf("%d + %d", test.A, test.B)
+		testName := fmt.Sprintf("%dX%d", test.A, test.B)
 		t.Run(testName, func(t *testing.T) {
 			result := GetSum(test.A, test.B)
 			if result != test.Result {

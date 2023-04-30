@@ -18,11 +18,31 @@ func TestGetHeaders(t *testing.T) {
 		ResultBody string
 	}{
 		{
-			"One header",
+			"SimpleHeader",
 			http.Header{
 				"Header": {"Value"},
 			},
 			"Header: Value\n",
+		},
+		{
+			"MultiValueHeader",
+			http.Header{
+				"Header": {"Value2", "Value1", "Value3"},
+			},
+			"Header: Value1\nHeader: Value2\nHeader: Value3\n",
+		},
+		{
+			"MultiHeaderXMultiValue",
+			http.Header{
+				"Header2":       {"Header2Value2", "Header2Value1", "Header2Value3"},
+				"Header1":       {"Header1Value2", "Header1Value1"},
+				"ZYXLastHeader": {"AAFirstValue"},
+				"OtherHeader":   {"SomeValue"},
+			},
+			"Header1: Header1Value1\nHeader1: Header1Value2\n" +
+				"Header2: Header2Value1\nHeader2: Header2Value2\nHeader2: Header2Value3\n" +
+				"OtherHeader: SomeValue\n" +
+				"ZYXLastHeader: AAFirstValue\n",
 		},
 	}
 
@@ -44,7 +64,7 @@ func TestGetHeaders(t *testing.T) {
 			}
 
 			if body := rr.Body.String(); body != test.ResultBody {
-				t.Errorf("handler returned unexpected body:\nExpected:\n %s\nGot:\n %s\n", test.ResultBody, body)
+				t.Errorf("handler returned unexpected body:\nExpected:\n%s\nGot:\n%s\n", test.ResultBody, body)
 			}
 		})
 	}
