@@ -36,7 +36,7 @@ jobs:
       run: |
         go test -v -mod readonly ./...
 
-    - name: Run tests  with race detector
+    - name: Run tests with race detector
       working-directory: ${{ matrix.module }}
       shell: bash
       run: |
