@@ -31,7 +31,8 @@ func GetHeaders(w http.ResponseWriter, r *http.Request) {
 	}
 
 	sort.Slice(sortedHeaders, func(i int, j int) bool {
-		return sortedHeaders[i].Name < sortedHeaders[j].Name || (sortedHeaders[i].Name == sortedHeaders[j].Name && sortedHeaders[i].Value < sortedHeaders[j].Value)
+		arr := sortedHeaders[:]
+		return arr[i].Name < arr[j].Name || (arr[i].Name == arr[j].Name && arr[i].Value < arr[j].Value)
 	})
 
 	for _, header := range sortedHeaders {

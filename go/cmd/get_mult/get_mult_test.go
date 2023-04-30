@@ -7,9 +7,9 @@ import (
 
 func TestGetMult(t *testing.T) {
 	var tests = []struct {
-		a      int
-		b      int
-		result int
+		A      int
+		B      int
+		Result int
 	}{
 		{0, 0, 0},
 		{1, 2, 2},
@@ -19,11 +19,11 @@ func TestGetMult(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		testName := fmt.Sprintf("%d * %d", test.a, test.b)
+		testName := fmt.Sprintf("%d * %d", test.A, test.A)
 		t.Run(testName, func(t *testing.T) {
-			result := GetMult(test.a, test.b)
-			if result != test.result {
-				t.Errorf("expected %d, got %d", test.result, result)
+			result := GetMult(test.A, test.B)
+			if result != test.Result {
+				t.Errorf("expected %d, got %d", test.Result, result)
 			}
 		})
 	}
