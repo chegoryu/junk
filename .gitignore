@@ -1,0 +1,4 @@
+# Tmp.
+/tmp/*
+!/tmp/.keep
+!/tmp/.zerodiff
