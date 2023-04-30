@@ -35,7 +35,7 @@ func TestGetHeaders(t *testing.T) {
 			req.Header = test.Header
 
 			rr := httptest.NewRecorder()
-    		handler := http.HandlerFunc(GetHeaders)
+			handler := http.HandlerFunc(GetHeaders)
 
 			handler.ServeHTTP(rr, req)
 
