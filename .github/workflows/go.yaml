@@ -13,7 +13,8 @@ jobs:
     strategy:
       matrix:
         module:
-        - go/cmd/simple
+        - go/cmd/get_sum
+        - go/cmd/get_mult
 
     steps:
     - uses: actions/checkout@v3
