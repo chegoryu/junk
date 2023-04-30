@@ -14,6 +14,9 @@ func GetHeaders(w http.ResponseWriter, r *http.Request) {
 	for _, headerValues := range r.Header {
 		headerCount += len(headerValues)
 	}
+	if len(r.Host) > 0 {
+		headerCount++
+	}
 
 	type Header struct {
 		Name  string
@@ -28,6 +31,12 @@ func GetHeaders(w http.ResponseWriter, r *http.Request) {
 				Value: headerValue,
 			})
 		}
+	}
+	if len(r.Host) > 0 {
+		sortedHeaders = append(sortedHeaders, Header{
+			Name:  "Host",
+			Value: r.Host,
+		})
 	}
 
 	sort.Slice(sortedHeaders, func(i int, j int) bool {

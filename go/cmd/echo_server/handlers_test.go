@@ -14,11 +14,13 @@ func TestGetHeaders(t *testing.T) {
 
 	var tests = []struct {
 		Name       string
+		Host       string
 		Header     http.Header
 		ResultBody string
 	}{
 		{
 			"SimpleHeader",
+			"",
 			http.Header{
 				"Header": {"Value"},
 			},
@@ -26,6 +28,7 @@ func TestGetHeaders(t *testing.T) {
 		},
 		{
 			"MultiValueHeader",
+			"",
 			http.Header{
 				"Header": {"Value2", "Value1", "Value3"},
 			},
@@ -33,6 +36,7 @@ func TestGetHeaders(t *testing.T) {
 		},
 		{
 			"MultiHeaderXMultiValue",
+			"",
 			http.Header{
 				"Header2":       {"Header2Value2", "Header2Value1", "Header2Value3"},
 				"Header1":       {"Header1Value2", "Header1Value1"},
@@ -44,6 +48,12 @@ func TestGetHeaders(t *testing.T) {
 				"OtherHeader: SomeValue\n" +
 				"ZYXLastHeader: AAFirstValue\n",
 		},
+		{
+			"HostHeader",
+			"somehost.com:1234",
+			http.Header{},
+			"Host: somehost.com:1234\n",
+		},
 	}
 
 	for _, test := range tests {
@@ -52,6 +62,7 @@ func TestGetHeaders(t *testing.T) {
 			if err != nil {
 				t.Error(err)
 			}
+			req.Host = test.Host
 			req.Header = test.Header
 
 			rr := httptest.NewRecorder()
