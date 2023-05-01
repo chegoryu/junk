@@ -25,7 +25,8 @@ jobs:
         include:
           - app-name: go-echo-server
             docker-file: docker/go_echo_server/Dockerfile
-            check-path: /headers
+            port: "80"
+            health-check-path: /headers
 
     steps:
       - name: Checkout repository
@@ -54,7 +55,7 @@ jobs:
 
       - name: Test with docker run
         run: |
-          container_id=$(docker run -d -p ${{ env.DOCKER_APP_PORT }}:80 --rm localhost:${{ env.LOCAL_REGISTRY_PORT }}/${{ matrix.app-name }}:latest)
+          container_id=$(docker run -d -p ${{ env.DOCKER_APP_PORT }}:${{ matrix.port }} --rm localhost:${{ env.LOCAL_REGISTRY_PORT }}/${{ matrix.app-name }}:latest)
           sleep 5
-          curl -v localhost:${{ env.DOCKER_APP_PORT }}${{ matrix.check-path }}
+          curl -v localhost:${{ env.DOCKER_APP_PORT }}${{ matrix.health-check-path }}
           docker stop $container_id
