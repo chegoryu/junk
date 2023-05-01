@@ -24,8 +24,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images:
-          - ${{ matrix.docker-image }}
+          images: |
+            ${{ matrix.docker-image }}
+            ghcr.io/${{ matrix.docker-image }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
