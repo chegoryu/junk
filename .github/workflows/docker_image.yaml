@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - docker-image: chegoryu/junk-go-echo-server
+          - docker-image: ${{ secrets.DOCKERHUB_USERNAME }}/junk-go-echo-server
             docker-file: docker/go_echo_server/Dockerfile
 
     steps:
@@ -26,7 +26,7 @@ jobs:
         with:
           images: |
             ${{ matrix.docker-image }}
-            ghcr.io/${{ matrix.docker-image }}
+            ghcr.io/${{ github.repository }}/go-echo-server
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
