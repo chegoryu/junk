@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"fmt"
@@ -7,14 +7,19 @@ import (
 	"sort"
 )
 
-func Ping(w http.ResponseWriter, r *http.Request) {
+func AddHandlers(mux *http.ServeMux) {
+	mux.HandleFunc("/ping", ping)
+	mux.HandleFunc("/headers", headers)
+}
+
+func ping(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "text/plain")
 
 	io.WriteString(w, "pong\n")
 }
 
-func GetHeaders(w http.ResponseWriter, r *http.Request) {
+func headers(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "text/plain")
 

@@ -1,4 +1,4 @@
-package main
+package handlers
 
 import (
 	"net/http"
@@ -6,19 +6,19 @@ import (
 	"testing"
 )
 
-func CheckHttpResponseCode(t *testing.T, rr *httptest.ResponseRecorder, expectedStatus int) {
+func checkHttpResponseCode(t *testing.T, rr *httptest.ResponseRecorder, expectedStatus int) {
 	if status := rr.Code; status != expectedStatus {
 		t.Errorf("handler returned wrong status code: expected %d, got %d", expectedStatus, status)
 	}
 }
 
-func CheckHttpResponseBody(t *testing.T, rr *httptest.ResponseRecorder, expectedBody string) {
+func checkHttpResponseBody(t *testing.T, rr *httptest.ResponseRecorder, expectedBody string) {
 	if body := rr.Body.String(); body != expectedBody {
 		t.Errorf("handler returned unexpected body:\nExpected:\n%s\nGot:\n%s\n", expectedBody, body)
 	}
 }
 
-func CheckHttpResponseHeaderValue(t *testing.T, rr *httptest.ResponseRecorder, headerName string, expectedHeaderValue string) {
+func checkHttpResponseHeaderValue(t *testing.T, rr *httptest.ResponseRecorder, headerName string, expectedHeaderValue string) {
 	if headerValue := rr.Header().Get(headerName); headerValue != expectedHeaderValue {
 		t.Errorf("handler returned unexpected '%s' header value: expected '%s', got '%s'", headerName, expectedHeaderValue, headerValue)
 	}
@@ -31,16 +31,16 @@ func TestPing(t *testing.T) {
 	}
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(Ping)
+	handler := http.HandlerFunc(ping)
 
 	handler.ServeHTTP(rr, req)
 
-	CheckHttpResponseCode(t, rr, http.StatusOK)
-	CheckHttpResponseHeaderValue(t, rr, "Content-Type", "text/plain")
-	CheckHttpResponseBody(t, rr, "pong\n")
+	checkHttpResponseCode(t, rr, http.StatusOK)
+	checkHttpResponseHeaderValue(t, rr, "Content-Type", "text/plain")
+	checkHttpResponseBody(t, rr, "pong\n")
 }
 
-func TestGetHeaders(t *testing.T) {
+func TestHeaders(t *testing.T) {
 	type Header struct {
 		Name  string
 		Value string
@@ -100,13 +100,13 @@ func TestGetHeaders(t *testing.T) {
 			req.Header = test.Header
 
 			rr := httptest.NewRecorder()
-			handler := http.HandlerFunc(GetHeaders)
+			handler := http.HandlerFunc(headers)
 
 			handler.ServeHTTP(rr, req)
 
-			CheckHttpResponseCode(t, rr, http.StatusOK)
-			CheckHttpResponseHeaderValue(t, rr, "Content-Type", "text/plain")
-			CheckHttpResponseBody(t, rr, test.ExpectedBody)
+			checkHttpResponseCode(t, rr, http.StatusOK)
+			checkHttpResponseHeaderValue(t, rr, "Content-Type", "text/plain")
+			checkHttpResponseBody(t, rr, test.ExpectedBody)
 		})
 	}
 }

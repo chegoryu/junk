@@ -4,17 +4,18 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/chegoryu/junk/go/cmd/echo_server/config"
+	"github.com/chegoryu/junk/go/cmd/echo_server/handlers"
 )
 
 func main() {
-	config := LoadConfig()
+	cfg := config.LoadConfig()
 
 	mux := http.NewServeMux()
+	handlers.AddHandlers(mux)
 
-	mux.HandleFunc("/ping", Ping)
-	mux.HandleFunc("/headers", GetHeaders)
-
-	addr := fmt.Sprintf(":%d", config.Port)
+	addr := fmt.Sprintf(":%d", cfg.Port)
 	log.Printf("starting server on %s", addr)
 
 	err := http.ListenAndServe(addr, mux)
