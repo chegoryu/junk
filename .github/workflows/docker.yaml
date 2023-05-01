@@ -41,7 +41,7 @@ jobs:
           file: ${{ matrix.docker-file }}
           context: .
           push: true
-          tags: localhost:${{ env.LOCAL_REGISTRY_PORT }}/${{ matrix.app-name }}:latest
+          tags: localhost:5000/name/app:latest
 
       - name: Inspect
         shell: bash
