@@ -41,12 +41,13 @@ jobs:
           load: true
           tags: ${{ matrix.docker-image }}:latest
 
-      - name: Inspect with Docker Buildx
+      - name: Inspect image with Docker inspect
         shell: bash
         run: |
           docker image inspect ${{ matrix.docker-image }}:latest
 
-      - name: Test with Docker run
+      - name: Test image with Docker run
+        shell: bash
         run: |
           container_id=$(docker run -d -p ${{ env.DOCKER_APP_PORT }}:${{ matrix.port }} --rm ${{ matrix.docker-image }}:latest)
           sleep 5
