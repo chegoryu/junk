@@ -18,6 +18,12 @@ func CheckHttpResponseBody(t *testing.T, rr *httptest.ResponseRecorder, expected
 	}
 }
 
+func CheckHttpResponseHeaderValue(t *testing.T, rr *httptest.ResponseRecorder, headerName string, expectedHeaderValue string) {
+	if headerValue := rr.Header().Get(headerName); headerValue != expectedHeaderValue {
+		t.Errorf("handler returned unexpected '%s' header value: expected '%s', got '%s'", headerName, expectedHeaderValue, headerValue)
+	}
+}
+
 func TestPing(t *testing.T) {
 	req, err := http.NewRequest("GET", "/ping", nil)
 	if err != nil {
@@ -30,6 +36,7 @@ func TestPing(t *testing.T) {
 	handler.ServeHTTP(rr, req)
 
 	CheckHttpResponseCode(t, rr, http.StatusOK)
+	CheckHttpResponseHeaderValue(t, rr, "Content-Type", "text/plain")
 	CheckHttpResponseBody(t, rr, "pong\n")
 }
 
@@ -98,6 +105,7 @@ func TestGetHeaders(t *testing.T) {
 			handler.ServeHTTP(rr, req)
 
 			CheckHttpResponseCode(t, rr, http.StatusOK)
+			CheckHttpResponseHeaderValue(t, rr, "Content-Type", "text/plain")
 			CheckHttpResponseBody(t, rr, test.ExpectedBody)
 		})
 	}
