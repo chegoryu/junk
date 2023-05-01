@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - docker-image: checkout/junk-go-echo-server
+          - docker-image: chegoryu/junk-go-echo-server
             docker-file: docker/go_echo_server/Dockerfile
 
     steps:
