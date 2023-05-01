@@ -23,7 +23,7 @@ jobs:
       matrix:
         include:
           - docker-file: docker/go_echo_server/Dockerfile
-          - app-name: go-echo-server
+            app-name: go-echo-server
 
     steps:
       - name: Checkout repository
