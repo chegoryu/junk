@@ -21,7 +21,7 @@ jobs:
           - docker-image: go-echo-server
             docker-file: docker/go_echo_server/Dockerfile
             port: "80"
-            health-check-path: /headers
+            health-check-path: /ping
 
     steps:
       - name: Checkout repository
