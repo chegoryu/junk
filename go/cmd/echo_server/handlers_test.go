@@ -6,6 +6,33 @@ import (
 	"testing"
 )
 
+func CheckHttpResponseCode(t *testing.T, rr *httptest.ResponseRecorder, expectedStatus int) {
+	if status := rr.Code; status != expectedStatus {
+		t.Errorf("handler returned wrong status code: expected %d, got %d", expectedStatus, status)
+	}
+}
+
+func CheckHttpResponseBody(t *testing.T, rr *httptest.ResponseRecorder, expectedBody string) {
+	if body := rr.Body.String(); body != expectedBody {
+		t.Errorf("handler returned unexpected body:\nExpected:\n%s\nGot:\n%s\n", expectedBody, body)
+	}
+}
+
+func TestPing(t *testing.T) {
+	req, err := http.NewRequest("GET", "/ping", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(Ping)
+
+	handler.ServeHTTP(rr, req)
+
+	CheckHttpResponseCode(t, rr, http.StatusOK)
+	CheckHttpResponseBody(t, rr, "pong\n")
+}
+
 func TestGetHeaders(t *testing.T) {
 	type Header struct {
 		Name  string
@@ -13,10 +40,10 @@ func TestGetHeaders(t *testing.T) {
 	}
 
 	var tests = []struct {
-		Name       string
-		Host       string
-		Header     http.Header
-		ResultBody string
+		Name         string
+		Host         string
+		Header       http.Header
+		ExpectedBody string
 	}{
 		{
 			"SimpleHeader",
@@ -70,13 +97,8 @@ func TestGetHeaders(t *testing.T) {
 
 			handler.ServeHTTP(rr, req)
 
-			if status := rr.Code; status != http.StatusOK {
-				t.Errorf("handler returned wrong status code: expected %d, got %d", http.StatusOK, status)
-			}
-
-			if body := rr.Body.String(); body != test.ResultBody {
-				t.Errorf("handler returned unexpected body:\nExpected:\n%s\nGot:\n%s\n", test.ResultBody, body)
-			}
+			CheckHttpResponseCode(t, rr, http.StatusOK)
+			CheckHttpResponseBody(t, rr, test.ExpectedBody)
 		})
 	}
 }

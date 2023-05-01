@@ -11,6 +11,7 @@ func main() {
 
 	mux := http.NewServeMux()
 
+	mux.HandleFunc("/ping", Ping)
 	mux.HandleFunc("/headers", GetHeaders)
 
 	addr := fmt.Sprintf(":%d", config.Port)
