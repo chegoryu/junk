@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  go-echo-server:
+    image: go-echo-server-dev
+    container_name: go-echo-server-dev
+    ports:
+      - 12365:80
+    restart: unless-stopped
