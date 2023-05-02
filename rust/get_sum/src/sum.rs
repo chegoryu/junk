@@ -15,5 +15,6 @@ mod tests {
         assert_eq!(get_sum(-7, 11), 4);
         assert_eq!(get_sum(-5, -1), -6);
         assert_eq!(get_sum(234, 434), 668);
+        assert_eq!(1, 2);
     }
 }
