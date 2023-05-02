@@ -30,7 +30,7 @@ jobs:
         id: git-describe
         shell: bash
         run: |
-          GIT_DESCRIBE=$(git describe --dirty --long)
+          GIT_DESCRIBE=$(git describe --tags --dirty --long)
 
       - name: Docker meta
         id: meta
