@@ -1,6 +1,6 @@
 [workspace]
 
 members = [
-    "get_mult",
-    "get_sum",
+    "bin/get_mult",
+    "bin/get_sum",
 ]
