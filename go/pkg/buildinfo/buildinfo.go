@@ -9,20 +9,30 @@ var (
 	Version     = "unknown"
 )
 
-func init() {
-	if GitDescribe != "unknown" {
-		Version = GitDescribe
+func getVersion(gitDescribe string) string {
+	version := gitDescribe
 
+	if version != "unknown" {
 		for _, prefix := range []string{
 			"heads/",
+			"remotes/",
 			"tags/",
 		} {
-			Version = strings.TrimPrefix(Version, prefix)
+			if strings.HasPrefix(version, prefix) {
+				version = strings.TrimPrefix(version, prefix)
+				break
+			}
 		}
 
-		if strings.Contains(Version, "-dirty") {
-			Version = strings.TrimSuffix(Version, "-dirty")
-			Version += "-modified"
+		if strings.Contains(version, "-dirty") {
+			version = strings.TrimSuffix(version, "-dirty")
+			version += "-modified"
 		}
 	}
+
+	return version
+}
+
+func init() {
+	Version = getVersion(GitDescribe)
 }
