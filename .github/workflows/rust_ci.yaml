@@ -27,6 +27,12 @@ jobs:
           rust-version: stable
           components: clippy rustfmt
 
+      - name: Check codestyle
+        working-directory: ${{ matrix.workspace }}
+        shell: bash
+        run: |
+          cargo fmt -v --all --check
+
       - name: Build
         working-directory: ${{ matrix.workspace }}
         shell: bash
