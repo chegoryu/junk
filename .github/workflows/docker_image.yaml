@@ -20,6 +20,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Go package
+        id: go-package
+        shell: bash
+        run: |
+          PKG=$(cat go/go.mod | head -n 1 | awk '{ print $2 }')
+
+      - name: Git describe
+        id: git-describe
+        shell: bash
+        run: |
+          GIT_DESCRIBE=$(git describe --dirty --long)
+
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v4
@@ -53,5 +65,8 @@ jobs:
           file: ${{ matrix.docker-file }}
           context: .
           push: true
+          build-args: |
+            PKG=${{ steps.go-package.outputs.PKG }}
+            GIT_DESCRIBE=${{ steps.git-describe.outputs.GIT_DESCRIBE }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
