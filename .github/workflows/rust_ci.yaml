@@ -1,0 +1,40 @@
+name: Rust CI
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "**"
+
+jobs:
+  check:
+    name: Run checks
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        workspace:
+          - rust
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Rust
+        uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: stable
+          components: clippy
+
+      - name: Build
+        working-directory: ${{ matrix.workspace }}
+        shell: bash
+        run: |
+          cargo build -v --workspace --all-targets --frozen
+
+      - name: Run tests
+        working-directory: ${{ matrix.workspace }}
+        shell: bash
+        run: |
+          cargo test --verbose --workspace --all-targets --frozen -- --include-ignored
