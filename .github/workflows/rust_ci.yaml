@@ -25,13 +25,21 @@ jobs:
         uses: ATiltedTree/setup-rust@v1
         with:
           rust-version: stable
-          components: clippy
+          components: |
+            clippy
+            rustfmt
 
       - name: Build
         working-directory: ${{ matrix.workspace }}
         shell: bash
         run: |
           cargo build -v --workspace --all-targets --frozen
+
+      - name: Run clippy checks
+        working-directory: ${{ matrix.workspace }}
+        shell: bash
+        run: |
+          cargo clippy --workspace --all-targets --frozen -- -D warnings
 
       - name: Run tests
         working-directory: ${{ matrix.workspace }}
