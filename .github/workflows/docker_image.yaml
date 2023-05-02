@@ -25,12 +25,14 @@ jobs:
         shell: bash
         run: |
           PKG=$(cat go/go.mod | head -n 1 | awk '{ print $2 }')
+          echo "PKG=$PKG" >> $GITHUB_OUTPUT
 
       - name: Git describe
         id: git-describe
         shell: bash
         run: |
           GIT_DESCRIBE=$(git describe --tags --dirty --long)
+          echo "GIT_DESCRIBE=$GIT_DESCRIBE" >> $GITHUB_OUTPUT
 
       - name: Docker meta
         id: meta
