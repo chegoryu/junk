@@ -25,9 +25,7 @@ jobs:
         uses: ATiltedTree/setup-rust@v1
         with:
           rust-version: stable
-          components: |
-            clippy
-            rustfmt
+          components: clippy rustfmt
 
       - name: Build
         working-directory: ${{ matrix.workspace }}
