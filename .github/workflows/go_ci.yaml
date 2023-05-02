@@ -27,10 +27,10 @@ jobs:
           go-version: "1.20"
 
       - name: Check codestyle
-        working-directory: ${{ matrix.module }}
-        shell: bash
-        run: |
-          gofmt -l -d .
+        uses: Jerome1337/gofmt-action@v1.0.5
+        with:
+          gofmt-path: "./${{ matrix.module }}"
+          gofmt-flags: '-l -d'
 
       - name: Build
         working-directory: ${{ matrix.module }}
