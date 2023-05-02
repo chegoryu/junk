@@ -5,10 +5,14 @@ import (
 	"io"
 	"net/http"
 	"sort"
+
+	"github.com/chegoryu/junk/go/pkg/buildinfo"
 )
 
 func AddHandlers(mux *http.ServeMux) {
 	mux.HandleFunc("/ping", ping)
+	mux.HandleFunc("/version", version)
+
 	mux.HandleFunc("/headers", headers)
 }
 
@@ -17,6 +21,13 @@ func ping(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
 
 	io.WriteString(w, "pong\n")
+}
+
+func version(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "text/plain")
+
+	fmt.Fprintf(w, "%s\n", buildinfo.Version)
 }
 
 func headers(w http.ResponseWriter, r *http.Request) {

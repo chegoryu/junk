@@ -1,9 +1,12 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/chegoryu/junk/go/pkg/buildinfo"
 )
 
 func checkHttpResponseCode(t *testing.T, rr *httptest.ResponseRecorder, expectedStatus int) {
@@ -38,6 +41,22 @@ func TestPing(t *testing.T) {
 	checkHttpResponseCode(t, rr, http.StatusOK)
 	checkHttpResponseHeaderValue(t, rr, "Content-Type", "text/plain")
 	checkHttpResponseBody(t, rr, "pong\n")
+}
+
+func TestVersion(t *testing.T) {
+	req, err := http.NewRequest("GET", "/ping", nil)
+	if err != nil {
+		t.Error(err)
+	}
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(version)
+
+	handler.ServeHTTP(rr, req)
+
+	checkHttpResponseCode(t, rr, http.StatusOK)
+	checkHttpResponseHeaderValue(t, rr, "Content-Type", "text/plain")
+	checkHttpResponseBody(t, rr, fmt.Sprintf("%s\n", buildinfo.Version))
 }
 
 func TestHeaders(t *testing.T) {
