@@ -10,7 +10,7 @@ pub fn mount_handlers(rocket_builder: Rocket<Build>) -> Rocket<Build> {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use super::*;
 
     use rocket::uri;

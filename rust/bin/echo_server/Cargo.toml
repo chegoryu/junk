@@ -6,5 +6,5 @@ workspace = "../.."
 
 [dependencies]
 clap = { version = "4.2.7", features = ["derive"] }
-figment = { version = "0.10.8", features = ["json"] }
+figment = { version = "0.10.8", features = ["json", "test"] }
 rocket = "0.5.0-rc.3"
