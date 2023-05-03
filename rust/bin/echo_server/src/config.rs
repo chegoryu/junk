@@ -1,6 +1,9 @@
 use clap::Parser;
+
 use figment::providers::{Format, Json};
-use rocket::{config::Config, figment::Figment};
+use rocket::config::Config;
+use rocket::figment::Figment;
+
 use std::path::Path;
 
 #[derive(Parser)]

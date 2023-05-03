@@ -2,10 +2,14 @@ mod config;
 mod handlers;
 
 use crate::config::get_rocket_config;
+use crate::handlers::mount_handlers;
 
-use rocket::{launch, routes};
+use rocket::{launch, Rocket, Build};
 
 #[launch]
-fn rocket() -> _ {
-    rocket::custom(get_rocket_config()).mount("/", routes![handlers::ping])
+fn rocket() -> Rocket<Build> {
+    let mut rocket_builder = rocket::custom(get_rocket_config());
+    rocket_builder = mount_handlers(rocket_builder);
+
+    rocket_builder
 }
