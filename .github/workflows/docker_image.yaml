@@ -15,10 +15,12 @@ jobs:
         include:
           - docker-image: chegoryu/junk-go-echo-server
             docker-file: docker/go_echo_server/Dockerfile
+            ghcr-package: go-echo-server
             go-mod-path: go/go.mod
 
           - docker-image: chegoryu/junk-rust-echo-server
             docker-file: docker/rust_echo_server/Dockerfile
+            ghcr-package: rust-echo-server
 
     steps:
       - name: Checkout repository
@@ -49,7 +51,7 @@ jobs:
         with:
           images: |
             ${{ matrix.docker-image }}
-            ghcr.io/${{ github.repository }}/go-echo-server
+            ghcr.io/${{ github.repository }}/{{ matrix.ghcr-package }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
