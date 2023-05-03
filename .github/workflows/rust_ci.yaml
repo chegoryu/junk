@@ -37,16 +37,16 @@ jobs:
         working-directory: ${{ matrix.workspace }}
         shell: bash
         run: |
-          cargo build -v --workspace --all-targets --frozen
+          cargo build -v --workspace --all-targets
 
       - name: Run clippy checks
         working-directory: ${{ matrix.workspace }}
         shell: bash
         run: |
-          cargo clippy --workspace --all-targets --frozen -- -D warnings
+          cargo clippy --workspace --all-targets -- -D warnings
 
       - name: Run tests
         working-directory: ${{ matrix.workspace }}
         shell: bash
         run: |
-          cargo test --verbose --workspace --all-targets --frozen -- --include-ignored
+          cargo test --verbose --workspace --all-targets -- --include-ignored
