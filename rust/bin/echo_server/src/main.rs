@@ -1,6 +1,16 @@
 #[macro_use]
 extern crate rocket;
 
+use clap::Parser;
+use figment::providers::{Format, Json};
+use rocket::config::Config;
+
+#[derive(Parser)]
+struct Args {
+    #[arg(short, long, default_value = "config.json")]
+    config: String,
+}
+
 #[get("/ping")]
 fn ping() -> &'static str {
     "pong"
@@ -8,7 +18,9 @@ fn ping() -> &'static str {
 
 #[launch]
 fn rocket() -> _ {
-    let rocket = rocket::build();
+    let args = Args::parse();
+    let config = Config::figment()
+        .merge(Json::file(args.config));
 
-    rocket.mount("/", routes![ping])
+    rocket::custom(config).mount("/", routes![ping])
 }
