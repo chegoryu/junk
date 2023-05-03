@@ -1,6 +1,7 @@
 [workspace]
 
 members = [
+    "bin/echo_server",
     "bin/get_mult",
     "bin/get_sum",
 ]
