@@ -28,9 +28,9 @@ jobs:
         id: go-package
         shell: bash
         run: |
-          if [[ ! -z "${{ matrix.stategy.go-mod-path }}" ]]
+          if [[ ! -z "${{ matrix.go-mod-path }}" ]]
           then
-              GO_PKG=$(cat ${{ matrix.strategy.go-mod-path }} | head -n 1 | awk '{ print $2 }')
+              GO_PKG=$(cat ${{ matrix.go-mod-path }} | head -n 1 | awk '{ print $2 }')
           else
               GO_PKG=not-set
           fi
