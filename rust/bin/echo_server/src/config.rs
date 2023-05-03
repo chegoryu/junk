@@ -12,16 +12,20 @@ struct Args {
     config: String,
 }
 
-pub fn get_rocket_config() -> Figment {
-    let args = Args::parse();
-    if !Path::new(&args.config).exists() {
+fn get_rocket_config_from_file(config_file_path: &str) -> Figment {
+    if !Path::new(config_file_path).exists() {
         panic!(
             "Failed to load config from '{}' file: file does not exist",
-            args.config
+            config_file_path
         );
     }
 
-    Config::figment().merge(Json::file(args.config))
+    Config::figment().merge(Json::file(config_file_path))
+}
+
+pub fn get_rocket_config() -> Figment {
+    let args = Args::parse();
+    get_rocket_config_from_file(&args.config)
 }
 
 #[cfg(test)]
@@ -32,7 +36,7 @@ mod tests {
     use rocket::Config;
 
     #[test]
-    fn test_get_rocket_config_success() {
+    fn test_get_rocket_config_from_file_success() {
         Jail::expect_with(|jail| {
             jail.create_file(
                 "config.json",
@@ -45,7 +49,10 @@ mod tests {
             )
             .unwrap();
 
-            let config = get_rocket_config().extract::<Config>().unwrap();
+            let config = get_rocket_config_from_file("config.json")
+                .extract::<Config>()
+                .unwrap();
+
             assert_eq!(config.port, 1234);
             assert_eq!(config.workers, 22);
 
@@ -54,24 +61,28 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "Failed to load config from 'config.json' file: file does not exist")]
-    fn test_get_rocket_config_no_config_file() {
+    #[should_panic(
+        expected = "Failed to load config from 'this_file_does_not_exist.json' file: file does not exist"
+    )]
+    fn test_get_rocket_config_from_file_no_config_file() {
         Jail::expect_with(|_jail| {
-            get_rocket_config().extract::<Config>().unwrap();
+            get_rocket_config_from_file("this_file_does_not_exist.json")
+                .extract::<Config>()
+                .unwrap();
 
             Ok(())
         });
-
-        get_rocket_config().extract::<Config>().unwrap();
     }
 
     #[test]
-    #[should_panic(expected = "expected value at line 1 column 2")]
-    fn test_get_rocket_config_bad_config_file() {
+    #[should_panic(expected = "at line 1 column 2")]
+    fn test_get_rocket_config_from_file_bad_config_file() {
         Jail::expect_with(|jail| {
             jail.create_file("config.json", "{bad json").unwrap();
 
-            get_rocket_config().extract::<Config>().unwrap();
+            get_rocket_config_from_file("config.json")
+                .extract::<Config>()
+                .unwrap();
 
             Ok(())
         });
