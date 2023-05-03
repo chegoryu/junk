@@ -23,6 +23,11 @@ jobs:
             port: "80"
             health-check-path: /ping
 
+          - docker-image: rust-echo-server
+            docker-file: docker/rust_echo_server/Dockerfile
+            port: "80"
+            health-check-path: /ping
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
