@@ -15,6 +15,10 @@ jobs:
         include:
           - docker-image: chegoryu/junk-go-echo-server
             docker-file: docker/go_echo_server/Dockerfile
+            go-mod-path: go/go.mod
+
+          - docker-image: chegoryu/junk-rust-echo-server
+            docker-file: docker/rust_echo_server/Dockerfile
 
     steps:
       - name: Checkout repository
@@ -24,8 +28,13 @@ jobs:
         id: go-package
         shell: bash
         run: |
-          PKG=$(cat go/go.mod | head -n 1 | awk '{ print $2 }')
-          echo "PKG=$PKG" >> $GITHUB_OUTPUT
+          if [[ ! -z "${{ matrix.stategy.go-mod-path }}" ]]
+          then
+              GO_PKG=$(cat ${{ matrix.strategy.go-mod-path }} | head -n 1 | awk '{ print $2 }')
+          else
+              GO_PKG=not-set
+          fi
+          echo "GO_PKG=$GO_PKG" >> $GITHUB_OUTPUT
 
       - name: Git describe
         id: git-describe
@@ -68,7 +77,7 @@ jobs:
           context: .
           push: true
           build-args: |
-            PKG=${{ steps.go-package.outputs.PKG }}
+            GO_PKG=${{ steps.go-package.outputs.GO_PKG }}
             GIT_DESCRIBE=${{ steps.git-describe.outputs.GIT_DESCRIBE }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

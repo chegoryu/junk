@@ -1,9 +1,9 @@
 FROM golang:1.20 as builder
 
 ARG GIT_DESCRIBE
-ARG PKG
+ARG GO_PKG
 
-ENV LDFLAGS="-X ${PKG}/pkg/buildinfo.GitDescribe=${GIT_DESCRIBE}"
+ENV LDFLAGS="-X ${GO_PKG}/pkg/buildinfo.GitDescribe=${GIT_DESCRIBE}"
 
 ENV BUILD_ROOT /build
 ENV SOURCE_ROOT /src
