@@ -4,7 +4,7 @@ mod handlers;
 use crate::config::get_rocket_config;
 use crate::handlers::mount_handlers;
 
-use rocket::{launch, Rocket, Build};
+use rocket::{launch, Build, Rocket};
 
 #[launch]
 fn rocket() -> Rocket<Build> {
