@@ -8,7 +8,7 @@ WORKDIR ${SOURCE_ROOT}
 COPY rust/ ${SOURCE_ROOT}/
 
 RUN rustup target add x86_64-unknown-linux-musl
-RUN cargo build --release --target x86_64-unknown-linux-musl --bin echo_server
+RUN GIT_DESCRIBE=${GIT_DESCRIBE} cargo build --release --target x86_64-unknown-linux-musl --bin echo_server
 
 FROM alpine:latest
 

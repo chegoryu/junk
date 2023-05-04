@@ -1,3 +1,4 @@
+use build_info::PROGRAM_VERSION;
 use const_format::formatcp;
 use rocket::{get, routes, Build, Rocket};
 
@@ -8,7 +9,7 @@ fn ping() -> &'static str {
 
 #[get("/version")]
 fn version() -> &'static str {
-    formatcp!("{}\n", build_info::VERSION)
+    formatcp!("{}\n", PROGRAM_VERSION)
 }
 
 pub fn mount_handlers(rocket_builder: Rocket<Build>) -> Rocket<Build> {
@@ -45,7 +46,7 @@ mod tests {
         assert_eq!(response.status(), Status::Ok);
         assert_eq!(
             response.into_string(),
-            Some(formatcp!("{}\n", build_info::VERSION).to_owned())
+            Some(formatcp!("{}\n", PROGRAM_VERSION).to_owned())
         );
     }
 }
