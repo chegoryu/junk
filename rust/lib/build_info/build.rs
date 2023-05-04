@@ -1,8 +1,6 @@
 fn main() {
     let git_describe = match option_env!("GIT_DESCRIBE") {
-        Some(git_describe) => {
-            git_describe
-        },
+        Some(git_describe) => git_describe,
         None => {
             println!("cargo:rustc-env=GIT_DESCRIBE=unknown");
             "unknown"
