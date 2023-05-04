@@ -12,22 +12,20 @@ var (
 func getProgramVersion(gitDescribe string) string {
 	programVersion := gitDescribe
 
-	if programVersion != "unknown" {
-		for _, prefix := range []string{
-			"heads/",
-			"remotes/",
-			"tags/",
-		} {
-			if strings.HasPrefix(programVersion, prefix) {
-				programVersion = strings.TrimPrefix(programVersion, prefix)
-				break
-			}
+	for _, prefix := range []string{
+		"heads/",
+		"remotes/",
+		"tags/",
+	} {
+		if strings.HasPrefix(programVersion, prefix) {
+			programVersion = strings.TrimPrefix(programVersion, prefix)
+			break
 		}
+	}
 
-		if strings.Contains(programVersion, "-dirty") {
-			programVersion = strings.TrimSuffix(programVersion, "-dirty")
-			programVersion += "-modified"
-		}
+	if strings.HasSuffix(programVersion, "-dirty") {
+		programVersion = strings.TrimSuffix(programVersion, "-dirty")
+		programVersion += "-modified"
 	}
 
 	return programVersion

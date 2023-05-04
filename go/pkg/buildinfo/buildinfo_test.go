@@ -29,6 +29,7 @@ func TestGetProgramVersion(t *testing.T) {
 		},
 
 		{"main-dirty", "main-modified"},
+		{"main-dirty-x", "main-dirty-x"},
 		{"heads/main-dirty", "main-modified"},
 	}
 
