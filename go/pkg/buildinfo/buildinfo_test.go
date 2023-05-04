@@ -4,10 +4,10 @@ import (
 	"testing"
 )
 
-func TestGetVersion(t *testing.T) {
+func TestGetProgramVersion(t *testing.T) {
 	var tests = []struct {
-		GitDescribe     string
-		ExpectedVersion string
+		GitDescribe            string
+		ExpectedProgramVersion string
 	}{
 		{"unknown", "unknown"},
 		{"random", "random"},
@@ -34,9 +34,9 @@ func TestGetVersion(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.GitDescribe, func(t *testing.T) {
-			version := getVersion(test.GitDescribe)
-			if version != test.ExpectedVersion {
-				t.Errorf("expected '%s', got '%s'", test.ExpectedVersion, version)
+			programVersion := getProgramVersion(test.GitDescribe)
+			if programVersion != test.ExpectedProgramVersion {
+				t.Errorf("expected '%s', got '%s'", test.ExpectedProgramVersion, programVersion)
 			}
 		})
 	}

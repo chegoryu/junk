@@ -56,7 +56,7 @@ func TestVersion(t *testing.T) {
 
 	checkHttpResponseCode(t, rr, http.StatusOK)
 	checkHttpResponseHeaderValue(t, rr, "Content-Type", "text/plain")
-	checkHttpResponseBody(t, rr, fmt.Sprintf("%s\n", buildinfo.Version))
+	checkHttpResponseBody(t, rr, fmt.Sprintf("%s\n", buildinfo.ProgramVersion))
 }
 
 func TestHeaders(t *testing.T) {

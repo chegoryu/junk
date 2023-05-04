@@ -5,34 +5,34 @@ import (
 )
 
 var (
-	GitDescribe = "unknown"
-	Version     = "unknown"
+	GitDescribe    = "unknown"
+	ProgramVersion = "unknown"
 )
 
-func getVersion(gitDescribe string) string {
-	version := gitDescribe
+func getProgramVersion(gitDescribe string) string {
+	programVersion := gitDescribe
 
-	if version != "unknown" {
+	if programVersion != "unknown" {
 		for _, prefix := range []string{
 			"heads/",
 			"remotes/",
 			"tags/",
 		} {
-			if strings.HasPrefix(version, prefix) {
-				version = strings.TrimPrefix(version, prefix)
+			if strings.HasPrefix(programVersion, prefix) {
+				programVersion = strings.TrimPrefix(programVersion, prefix)
 				break
 			}
 		}
 
-		if strings.Contains(version, "-dirty") {
-			version = strings.TrimSuffix(version, "-dirty")
-			version += "-modified"
+		if strings.Contains(programVersion, "-dirty") {
+			programVersion = strings.TrimSuffix(programVersion, "-dirty")
+			programVersion += "-modified"
 		}
 	}
 
-	return version
+	return programVersion
 }
 
 func init() {
-	Version = getVersion(GitDescribe)
+	ProgramVersion = getProgramVersion(GitDescribe)
 }
