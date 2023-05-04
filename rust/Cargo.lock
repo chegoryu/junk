@@ -120,6 +120,9 @@ checksum = "24a6904aef64d73cf10ab17ebace7befb918b82164785cb89907993be7f83813"
 [[package]]
 name = "build_info"
 version = "0.1.0"
+dependencies = [
+ "program_version",
+]
 
 [[package]]
 name = "bytes"
@@ -820,6 +823,10 @@ dependencies = [
  "version_check",
  "yansi",
 ]
+
+[[package]]
+name = "program_version"
+version = "0.1.0"
 
 [[package]]
 name = "quote"

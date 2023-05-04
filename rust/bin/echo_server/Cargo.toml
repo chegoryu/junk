@@ -5,8 +5,9 @@ edition = "2021"
 workspace = "../.."
 
 [dependencies]
-clap = { version = "4.2.7", features = ["derive"] }
 build_info = { path = "../../lib/build_info" }
+
+clap = { version = "4.2.7", features = ["derive"] }
+const_format = "0.2.30"
 figment = { version = "0.10.8", features = ["json", "test"] }
 rocket = "0.5.0-rc.3"
-const_format = "0.2.30"

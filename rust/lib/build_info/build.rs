@@ -1,3 +1,5 @@
+use program_version::get_program_version;
+
 fn main() {
     let git_describe = match option_env!("GIT_DESCRIBE") {
         Some(git_describe) => git_describe,
@@ -8,6 +10,9 @@ fn main() {
     };
 
     if option_env!("PROGRAM_VERSION").is_none() {
-        println!("cargo:rustc-env=PROGRAM_VERSION={}", git_describe);
+        println!(
+            "cargo:rustc-env=PROGRAM_VERSION={}",
+            get_program_version(git_describe)
+        );
     }
 }
