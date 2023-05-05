@@ -1,4 +1,4 @@
-FROM rustlang/rust:nightly as builder
+FROM rust:1.69 as builder
 
 ARG GIT_DESCRIBE
 

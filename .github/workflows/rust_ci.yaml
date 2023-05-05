@@ -24,7 +24,7 @@ jobs:
       - name: Set up Rust
         uses: ATiltedTree/setup-rust@v1
         with:
-          rust-version: nightly
+          rust-version: stable
           components: clippy rustfmt
 
       - name: Check codestyle
