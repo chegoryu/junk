@@ -72,6 +72,12 @@ func TestHeaders(t *testing.T) {
 		ExpectedBody string
 	}{
 		{
+			"EmptyHeaders",
+			"",
+			http.Header{},
+			"",
+		},
+		{
 			"SimpleHeader",
 			"",
 			http.Header{
