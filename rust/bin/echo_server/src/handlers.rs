@@ -58,10 +58,10 @@ pub fn mount_handlers(rocket_builder: Rocket<Build>) -> Rocket<Build> {
 mod tests {
     use super::*;
 
-    use rocket::uri;
-
+    use const_format::concatcp;
     use rocket::http::Status;
     use rocket::local::blocking::Client;
+    use rocket::uri;
 
     fn get_client() -> Client {
         Client::tracked(mount_handlers(rocket::build())).expect("Failed to create rocket client")
@@ -90,11 +90,63 @@ mod tests {
 
     #[test]
     fn test_headers() {
+        struct Test<'r> {
+            headers: Vec<Header<'r>>,
+            expected_body: &'r str,
+        }
+
+        let tests = [
+            Test {
+                headers: [].to_vec(),
+                expected_body: "",
+            },
+            Test {
+                headers: [Header::new("Header", "Value")].to_vec(),
+                expected_body: "Header: Value\n",
+            },
+            Test {
+                headers: [
+                    Header::new("Header", "Value2"),
+                    Header::new("Header", "Value1"),
+                    Header::new("Header", "Value3"),
+                ]
+                .to_vec(),
+                expected_body: "Header: Value1\nHeader: Value2\nHeader: Value3\n",
+            },
+            Test {
+                headers: [
+                    Header::new("Header2", "Header2Value2"),
+                    Header::new("Header2", "Header2Value1"),
+                    Header::new("Header2", "Header2Value3"),
+                    Header::new("Header1", "Header1Value2"),
+                    Header::new("Header1", "Header1Value1"),
+                    Header::new("ZYXLastHeader", "AAFirstValue"),
+                    Header::new("OtherHeader", "SomeValue"),
+                ]
+                .to_vec(),
+                expected_body: concatcp!(
+                    "Header1: Header1Value1\nHeader1: Header1Value2\n",
+                    "Header2: Header2Value1\nHeader2: Header2Value2\nHeader2: Header2Value3\n",
+                    "OtherHeader: SomeValue\n",
+                    "ZYXLastHeader: AAFirstValue\n",
+                ),
+            },
+            Test {
+                headers: [Header::new("host", "somehost.com:1234")].to_vec(),
+                expected_body: "host: somehost.com:1234\n",
+            },
+        ];
+
         let client = get_client();
 
-        let response = client.get(uri!(headers)).dispatch();
-        assert_eq!(response.status(), Status::Ok);
-        assert_eq!(response.into_string(), Some("".to_owned()));
-        // TODO: More tests.
+        for test in tests {
+            let mut local_request = client.get(uri!(headers));
+            for header in test.headers {
+                local_request = local_request.header(header)
+            }
+            let response = local_request.dispatch();
+            assert_eq!(response.status(), Status::Ok);
+            assert_eq!(response.into_string(), Some(test.expected_body.to_owned()));
+        }
     }
 }
