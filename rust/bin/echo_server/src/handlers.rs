@@ -43,7 +43,7 @@ fn headers(request_headers: RequestHeaders) -> String {
         request_headers
             .headers
             .iter()
-            .map(|header| header.to_string())
+            .map(|header| header.name().to_string().to_lowercase() + ": " + header.value())
             .collect::<Vec<String>>()
             .join("\n")
             + "\n"
@@ -102,7 +102,7 @@ mod tests {
             },
             Test {
                 headers: [Header::new("Header", "Value")].to_vec(),
-                expected_body: "Header: Value\n",
+                expected_body: "header: Value\n",
             },
             Test {
                 headers: [
@@ -111,7 +111,11 @@ mod tests {
                     Header::new("Header", "Value3"),
                 ]
                 .to_vec(),
-                expected_body: "Header: Value1\nHeader: Value2\nHeader: Value3\n",
+                expected_body: concatcp!(
+                    "header: Value1\n",
+                    "header: Value2\n",
+                    "header: Value3\n",
+                ),
             },
             Test {
                 headers: [
@@ -125,15 +129,48 @@ mod tests {
                 ]
                 .to_vec(),
                 expected_body: concatcp!(
-                    "Header1: Header1Value1\nHeader1: Header1Value2\n",
-                    "Header2: Header2Value1\nHeader2: Header2Value2\nHeader2: Header2Value3\n",
-                    "OtherHeader: SomeValue\n",
-                    "ZYXLastHeader: AAFirstValue\n",
+                    "header1: Header1Value1\n",
+                    "header1: Header1Value2\n",
+                    "header2: Header2Value1\n",
+                    "header2: Header2Value2\n",
+                    "header2: Header2Value3\n",
+                    "otherheader: SomeValue\n",
+                    "zyxlastheader: AAFirstValue\n",
                 ),
             },
             Test {
                 headers: [Header::new("host", "somehost.com:1234")].to_vec(),
                 expected_body: "host: somehost.com:1234\n",
+            },
+            Test {
+                headers: [
+                    Header::new("aHeader", "aHeaderValue"),
+                    Header::new("BHeader", "BHeaderValue"),
+                    Header::new("cHeader", "cHeaderValue"),
+                    Header::new("DHeader", "DHeaderValue"),
+                ]
+                .to_vec(),
+                expected_body: concatcp!(
+                    "aheader: aHeaderValue\n",
+                    "bheader: BHeaderValue\n",
+                    "cheader: cHeaderValue\n",
+                    "dheader: DHeaderValue\n",
+                ),
+            },
+            Test {
+                headers: [
+                    Header::new("Header", "aHeaderValue"),
+                    Header::new("Header", "BHeaderValue"),
+                    Header::new("Header", "cHeaderValue"),
+                    Header::new("Header", "DHeaderValue"),
+                ]
+                .to_vec(),
+                expected_body: concatcp!(
+                    "header: BHeaderValue\n",
+                    "header: DHeaderValue\n",
+                    "header: aHeaderValue\n",
+                    "header: cHeaderValue\n",
+                ),
             },
         ];
 
