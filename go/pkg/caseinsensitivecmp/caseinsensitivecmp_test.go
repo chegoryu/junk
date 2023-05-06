@@ -42,9 +42,9 @@ func TestEqual(t *testing.T) {
 
 func TestLessAndGreaterOrEqual(t *testing.T) {
 	var tests = []struct {
-		A                  string
-		B                  string
-		ExpectedLessResult bool
+		A          string
+		B          string
+		LessResult bool
 	}{
 		{"a", "A", false},
 		{"A", "B", true},
@@ -69,21 +69,21 @@ func TestLessAndGreaterOrEqual(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			{
 				result := Less(test.A, test.B)
-				if result != test.ExpectedLessResult {
-					t.Errorf("expected '%t', got '%t'", test.ExpectedLessResult, result)
+				if result != test.LessResult {
+					t.Errorf("expected '%t', got '%t'", test.LessResult, result)
 				}
 			}
 
 			{
 				result := GreaterOrEqual(test.A, test.B)
-				if result != !test.ExpectedLessResult {
-					t.Errorf("expected '%t', got '%t'", !test.ExpectedLessResult, result)
+				if result != !test.LessResult {
+					t.Errorf("expected '%t', got '%t'", !test.LessResult, result)
 				}
 			}
 
 			{
 				result := Less(test.B, test.A)
-				expectedResult := !Equal(test.A, test.B) && !test.ExpectedLessResult
+				expectedResult := !Equal(test.A, test.B) && !test.LessResult
 				if result != expectedResult {
 					t.Errorf("expected '%t', got '%t'", expectedResult, result)
 				}
@@ -91,7 +91,7 @@ func TestLessAndGreaterOrEqual(t *testing.T) {
 
 			{
 				result := GreaterOrEqual(test.B, test.A)
-				expectedResult := Equal(test.A, test.B) || test.ExpectedLessResult
+				expectedResult := Equal(test.A, test.B) || test.LessResult
 				if result != expectedResult {
 					t.Errorf("expected '%t', got '%t'", expectedResult, result)
 				}
@@ -102,9 +102,9 @@ func TestLessAndGreaterOrEqual(t *testing.T) {
 
 func TestGreaterAndLessOrEqual(t *testing.T) {
 	var tests = []struct {
-		A                     string
-		B                     string
-		ExpectedGreaterResult bool
+		A             string
+		B             string
+		GreaterResult bool
 	}{
 		{"a", "A", false},
 		{"A", "B", false},
@@ -129,21 +129,21 @@ func TestGreaterAndLessOrEqual(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			{
 				result := Greater(test.A, test.B)
-				if result != test.ExpectedGreaterResult {
-					t.Errorf("expected '%t', got '%t'", test.ExpectedGreaterResult, result)
+				if result != test.GreaterResult {
+					t.Errorf("expected '%t', got '%t'", test.GreaterResult, result)
 				}
 			}
 
 			{
 				result := LessOrEqual(test.A, test.B)
-				if result != !test.ExpectedGreaterResult {
-					t.Errorf("expected '%t', got '%t'", !test.ExpectedGreaterResult, result)
+				if result != !test.GreaterResult {
+					t.Errorf("expected '%t', got '%t'", !test.GreaterResult, result)
 				}
 			}
 
 			{
 				result := Greater(test.B, test.A)
-				expectedResult := !Equal(test.A, test.B) && !test.ExpectedGreaterResult
+				expectedResult := !Equal(test.A, test.B) && !test.GreaterResult
 				if result != expectedResult {
 					t.Errorf("expected '%t', got '%t'", expectedResult, result)
 				}
@@ -151,7 +151,7 @@ func TestGreaterAndLessOrEqual(t *testing.T) {
 
 			{
 				result := LessOrEqual(test.B, test.A)
-				expectedResult := Equal(test.A, test.B) || test.ExpectedGreaterResult
+				expectedResult := Equal(test.A, test.B) || test.GreaterResult
 				if result != expectedResult {
 					t.Errorf("expected '%t', got '%t'", expectedResult, result)
 				}
