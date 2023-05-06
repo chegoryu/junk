@@ -1,9 +1,9 @@
 package caseinsensitivecmp
 
 import (
+	"strings"
 	"unicode"
 	"unicode/utf8"
-	"strings"
 )
 
 func lessInternal(a string, b string, allowEqual bool) bool {
