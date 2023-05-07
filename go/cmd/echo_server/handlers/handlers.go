@@ -5,8 +5,10 @@ import (
 	"io"
 	"net/http"
 	"sort"
+	"strings"
 
 	"github.com/chegoryu/junk/go/pkg/buildinfo"
+	"github.com/chegoryu/junk/go/pkg/caseinsensitivecmp"
 )
 
 func AddHandlers(mux *http.ServeMux) {
@@ -58,17 +60,18 @@ func headers(w http.ResponseWriter, r *http.Request) {
 	}
 	if len(r.Host) > 0 {
 		sortedHeaders = append(sortedHeaders, Header{
-			Name:  "Host",
+			Name:  "host",
 			Value: r.Host,
 		})
 	}
 
 	sort.Slice(sortedHeaders, func(i int, j int) bool {
 		arr := sortedHeaders[:]
-		return arr[i].Name < arr[j].Name || (arr[i].Name == arr[j].Name && arr[i].Value < arr[j].Value)
+		return caseinsensitivecmp.Less(arr[i].Name, arr[j].Name) ||
+			(caseinsensitivecmp.Equal(arr[i].Name, arr[j].Name) && arr[i].Value < arr[j].Value)
 	})
 
 	for _, header := range sortedHeaders {
-		fmt.Fprintf(w, "%s: %s\n", header.Name, header.Value)
+		fmt.Fprintf(w, "%s: %s\n", strings.ToLower(header.Name), header.Value)
 	}
 }

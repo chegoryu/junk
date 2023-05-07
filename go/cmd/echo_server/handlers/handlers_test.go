@@ -81,37 +81,97 @@ func TestHeaders(t *testing.T) {
 			"SimpleHeader",
 			"",
 			http.Header{
-				"Header": {"Value"},
+				"Header": {
+					"Value",
+				},
 			},
-			"Header: Value\n",
+			"header: Value\n",
 		},
 		{
 			"MultiValueHeader",
 			"",
 			http.Header{
-				"Header": {"Value2", "Value1", "Value3"},
+				"Header": {
+					"Value2",
+					"Value1",
+					"Value3",
+				},
 			},
-			"Header: Value1\nHeader: Value2\nHeader: Value3\n",
+			"header: Value1\n" +
+				"header: Value2\n" +
+				"header: Value3\n",
 		},
 		{
 			"MultiHeaderXMultiValue",
 			"",
 			http.Header{
-				"Header2":       {"Header2Value2", "Header2Value1", "Header2Value3"},
-				"Header1":       {"Header1Value2", "Header1Value1"},
-				"ZYXLastHeader": {"AAFirstValue"},
-				"OtherHeader":   {"SomeValue"},
+				"Header2": {
+					"Header2Value2",
+					"Header2Value1",
+					"Header2Value3",
+				},
+				"Header1": {
+					"Header1Value2",
+					"Header1Value1",
+				},
+				"ZYXLastHeader": {
+					"AAFirstValue",
+				},
+				"OtherHeader": {
+					"SomeValue",
+				},
 			},
-			"Header1: Header1Value1\nHeader1: Header1Value2\n" +
-				"Header2: Header2Value1\nHeader2: Header2Value2\nHeader2: Header2Value3\n" +
-				"OtherHeader: SomeValue\n" +
-				"ZYXLastHeader: AAFirstValue\n",
+			"header1: Header1Value1\n" +
+				"header1: Header1Value2\n" +
+				"header2: Header2Value1\n" +
+				"header2: Header2Value2\n" +
+				"header2: Header2Value3\n" +
+				"otherheader: SomeValue\n" +
+				"zyxlastheader: AAFirstValue\n",
 		},
 		{
 			"HostHeader",
 			"somehost.com:1234",
 			http.Header{},
-			"Host: somehost.com:1234\n",
+			"host: somehost.com:1234\n",
+		},
+		{
+			"CaseInsensitiveHeaderNameCmp",
+			"",
+			http.Header{
+				"aHeader": {
+					"aHeaderValue",
+				},
+				"BHeader": {
+					"BHeaderValue",
+				},
+				"cHeader": {
+					"cHeaderValue",
+				},
+				"DHeader": {
+					"DHeaderValue",
+				},
+			},
+			"aheader: aHeaderValue\n" +
+				"bheader: BHeaderValue\n" +
+				"cheader: cHeaderValue\n" +
+				"dheader: DHeaderValue\n",
+		},
+		{
+			"CaseSensitiveHeaderValueCmp",
+			"",
+			http.Header{
+				"Header": {
+					"aHeaderValue",
+					"BHeaderValue",
+					"cHeaderValue",
+					"DHeaderValue",
+				},
+			},
+			"header: BHeaderValue\n" +
+				"header: DHeaderValue\n" +
+				"header: aHeaderValue\n" +
+				"header: cHeaderValue\n",
 		},
 	}
 
