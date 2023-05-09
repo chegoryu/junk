@@ -1,5 +1,6 @@
 use build_info::PROGRAM_VERSION;
 use const_format::formatcp;
+use itertools::join;
 use rocket::async_trait;
 use rocket::http::Header;
 use rocket::request::{FromRequest, Outcome};
@@ -40,13 +41,13 @@ fn headers(request_headers: RequestHeaders) -> String {
     if request_headers.headers.is_empty() {
         String::new()
     } else {
-        request_headers
-            .headers
-            .iter()
-            .map(|header| header.name().to_string().to_lowercase() + ": " + header.value())
-            .collect::<Vec<String>>()
-            .join("\n")
-            + "\n"
+        join(
+            request_headers
+                .headers
+                .iter()
+                .map(|header| header.name().to_string().to_lowercase() + ": " + header.value()),
+            "\n",
+        ) + "\n"
     }
 }
 
