@@ -1,4 +1,4 @@
-FROM rust:1.69 as builder
+FROM rust:1.71.1 as builder
 
 ARG GIT_DESCRIBE
 

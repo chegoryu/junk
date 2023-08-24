@@ -1,4 +1,4 @@
-FROM golang:1.20 as builder
+FROM golang:1.21 as builder
 
 ARG GIT_DESCRIBE
 ARG GO_PKG
