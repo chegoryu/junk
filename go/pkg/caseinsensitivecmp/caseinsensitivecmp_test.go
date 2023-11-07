@@ -3,6 +3,8 @@ package caseinsensitivecmp
 import (
 	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestEqual(t *testing.T) {
@@ -23,19 +25,8 @@ func TestEqual(t *testing.T) {
 	for _, test := range tests {
 		testName := fmt.Sprintf("%sX%s", test.A, test.B)
 		t.Run(testName, func(t *testing.T) {
-			{
-				result := Equal(test.A, test.B)
-				if result != test.Result {
-					t.Errorf("expected '%t', got '%t'", test.Result, result)
-				}
-			}
-
-			{
-				result := Equal(test.B, test.A)
-				if result != test.Result {
-					t.Errorf("expected '%t', got '%t'", test.Result, result)
-				}
-			}
+			require.Equal(t, test.Result, Equal(test.A, test.B))
+			require.Equal(t, test.Result, Equal(test.B, test.A))
 		})
 	}
 }
@@ -67,35 +58,10 @@ func TestLessAndGreaterOrEqual(t *testing.T) {
 	for _, test := range tests {
 		testName := fmt.Sprintf("%sX%s", test.A, test.B)
 		t.Run(testName, func(t *testing.T) {
-			{
-				result := Less(test.A, test.B)
-				if result != test.LessResult {
-					t.Errorf("expected '%t', got '%t'", test.LessResult, result)
-				}
-			}
-
-			{
-				result := GreaterOrEqual(test.A, test.B)
-				if result != !test.LessResult {
-					t.Errorf("expected '%t', got '%t'", !test.LessResult, result)
-				}
-			}
-
-			{
-				result := Less(test.B, test.A)
-				expectedResult := !Equal(test.A, test.B) && !test.LessResult
-				if result != expectedResult {
-					t.Errorf("expected '%t', got '%t'", expectedResult, result)
-				}
-			}
-
-			{
-				result := GreaterOrEqual(test.B, test.A)
-				expectedResult := Equal(test.A, test.B) || test.LessResult
-				if result != expectedResult {
-					t.Errorf("expected '%t', got '%t'", expectedResult, result)
-				}
-			}
+			require.Equal(t, test.LessResult, Less(test.A, test.B))
+			require.Equal(t, !test.LessResult, GreaterOrEqual(test.A, test.B))
+			require.Equal(t, !Equal(test.A, test.B) && !test.LessResult, Less(test.B, test.A))
+			require.Equal(t, Equal(test.A, test.B) || test.LessResult, GreaterOrEqual(test.B, test.A))
 		})
 	}
 }
@@ -127,35 +93,10 @@ func TestGreaterAndLessOrEqual(t *testing.T) {
 	for _, test := range tests {
 		testName := fmt.Sprintf("%sX%s", test.A, test.B)
 		t.Run(testName, func(t *testing.T) {
-			{
-				result := Greater(test.A, test.B)
-				if result != test.GreaterResult {
-					t.Errorf("expected '%t', got '%t'", test.GreaterResult, result)
-				}
-			}
-
-			{
-				result := LessOrEqual(test.A, test.B)
-				if result != !test.GreaterResult {
-					t.Errorf("expected '%t', got '%t'", !test.GreaterResult, result)
-				}
-			}
-
-			{
-				result := Greater(test.B, test.A)
-				expectedResult := !Equal(test.A, test.B) && !test.GreaterResult
-				if result != expectedResult {
-					t.Errorf("expected '%t', got '%t'", expectedResult, result)
-				}
-			}
-
-			{
-				result := LessOrEqual(test.B, test.A)
-				expectedResult := Equal(test.A, test.B) || test.GreaterResult
-				if result != expectedResult {
-					t.Errorf("expected '%t', got '%t'", expectedResult, result)
-				}
-			}
+			require.Equal(t, test.GreaterResult, Greater(test.A, test.B))
+			require.Equal(t, !test.GreaterResult, LessOrEqual(test.A, test.B))
+			require.Equal(t, !Equal(test.A, test.B) && !test.GreaterResult, Greater(test.B, test.A))
+			require.Equal(t, Equal(test.A, test.B) || test.GreaterResult, LessOrEqual(test.B, test.A))
 		})
 	}
 }

@@ -2,6 +2,8 @@ package buildinfo
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestGetProgramVersion(t *testing.T) {
@@ -35,10 +37,7 @@ func TestGetProgramVersion(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.GitDescribe, func(t *testing.T) {
-			programVersion := getProgramVersion(test.GitDescribe)
-			if programVersion != test.ExpectedProgramVersion {
-				t.Errorf("expected '%s', got '%s'", test.ExpectedProgramVersion, programVersion)
-			}
+			require.Equal(t, test.ExpectedProgramVersion, getProgramVersion(test.GitDescribe))
 		})
 	}
 }

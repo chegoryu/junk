@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestGetSum(t *testing.T) {
@@ -21,10 +23,7 @@ func TestGetSum(t *testing.T) {
 	for _, test := range tests {
 		testName := fmt.Sprintf("%dX%d", test.A, test.B)
 		t.Run(testName, func(t *testing.T) {
-			result := GetSum(test.A, test.B)
-			if result != test.Result {
-				t.Errorf("expected %d, got %d", test.Result, result)
-			}
+			require.Equal(t, test.Result, GetSum(test.A, test.B))
 		})
 	}
 }

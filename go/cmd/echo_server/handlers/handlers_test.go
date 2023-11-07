@@ -7,56 +7,43 @@ import (
 	"testing"
 
 	"github.com/chegoryu/junk/go/pkg/buildinfo"
+	"github.com/stretchr/testify/require"
 )
 
-func checkHttpResponseCode(t *testing.T, rr *httptest.ResponseRecorder, expectedStatus int) {
-	if status := rr.Code; status != expectedStatus {
-		t.Errorf("handler returned wrong status code: expected %d, got %d", expectedStatus, status)
-	}
-}
-
-func checkHttpResponseBody(t *testing.T, rr *httptest.ResponseRecorder, expectedBody string) {
-	if body := rr.Body.String(); body != expectedBody {
-		t.Errorf("handler returned unexpected body:\nExpected:\n%s\nGot:\n%s\n", expectedBody, body)
-	}
-}
-
 func checkHttpResponseHeaderValue(t *testing.T, rr *httptest.ResponseRecorder, headerName string, expectedHeaderValue string) {
-	if headerValue := rr.Header().Get(headerName); headerValue != expectedHeaderValue {
-		t.Errorf("handler returned unexpected '%s' header value: expected '%s', got '%s'", headerName, expectedHeaderValue, headerValue)
-	}
+	require.Equalf(
+		t,
+		expectedHeaderValue, rr.Header().Get(headerName),
+		"handler returned unexpected '%s' header value", headerName,
+	)
 }
 
 func TestPing(t *testing.T) {
 	req, err := http.NewRequest("GET", "/ping", nil)
-	if err != nil {
-		t.Error(err)
-	}
+	require.NoError(t, err)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(ping)
 
 	handler.ServeHTTP(rr, req)
 
-	checkHttpResponseCode(t, rr, http.StatusOK)
+	require.Equal(t, http.StatusOK, rr.Code)
 	checkHttpResponseHeaderValue(t, rr, "Content-Type", "text/plain")
-	checkHttpResponseBody(t, rr, "pong\n")
+	require.Equal(t, "pong\n", rr.Body.String())
 }
 
 func TestVersion(t *testing.T) {
 	req, err := http.NewRequest("GET", "/ping", nil)
-	if err != nil {
-		t.Error(err)
-	}
+	require.NoError(t, err)
 
 	rr := httptest.NewRecorder()
 	handler := http.HandlerFunc(version)
 
 	handler.ServeHTTP(rr, req)
 
-	checkHttpResponseCode(t, rr, http.StatusOK)
+	require.Equal(t, http.StatusOK, rr.Code)
 	checkHttpResponseHeaderValue(t, rr, "Content-Type", "text/plain")
-	checkHttpResponseBody(t, rr, fmt.Sprintf("%s\n", buildinfo.ProgramVersion))
+	require.Equal(t, fmt.Sprintf("%s\n", buildinfo.ProgramVersion), rr.Body.String())
 }
 
 func TestHeaders(t *testing.T) {
@@ -178,9 +165,8 @@ func TestHeaders(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.Name, func(t *testing.T) {
 			req, err := http.NewRequest("GET", "/headers", nil)
-			if err != nil {
-				t.Error(err)
-			}
+			require.NoError(t, err)
+
 			req.Host = test.Host
 			req.Header = test.Header
 
@@ -189,9 +175,9 @@ func TestHeaders(t *testing.T) {
 
 			handler.ServeHTTP(rr, req)
 
-			checkHttpResponseCode(t, rr, http.StatusOK)
+			require.Equal(t, http.StatusOK, rr.Code)
 			checkHttpResponseHeaderValue(t, rr, "Content-Type", "text/plain")
-			checkHttpResponseBody(t, rr, test.ExpectedBody)
+			require.Equal(t, test.ExpectedBody, rr.Body.String())
 		})
 	}
 }

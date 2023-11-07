@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestGetMult(t *testing.T) {
@@ -21,10 +23,7 @@ func TestGetMult(t *testing.T) {
 	for _, test := range tests {
 		testName := fmt.Sprintf("%dX%d", test.A, test.A)
 		t.Run(testName, func(t *testing.T) {
-			result := GetMult(test.A, test.B)
-			if result != test.Result {
-				t.Errorf("expected %d, got %d", test.Result, result)
-			}
+			require.Equal(t, test.Result, GetMult(test.A, test.B))
 		})
 	}
 }
