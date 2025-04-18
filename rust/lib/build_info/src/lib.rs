@@ -6,11 +6,13 @@ mod tests {
     use super::*;
 
     #[test]
+    #[allow(clippy::const_is_empty)]
     fn test_git_describe() {
         assert!(!GIT_DESCRIBE.is_empty());
     }
 
     #[test]
+    #[allow(clippy::const_is_empty)]
     fn test_program_version() {
         assert!(!PROGRAM_VERSION.is_empty());
     }
