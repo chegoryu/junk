@@ -1,5 +1,5 @@
 use rocket::http::Status;
-use rocket::{catch, catchers, Build, Request, Rocket};
+use rocket::{Build, Request, Rocket, catch, catchers};
 
 #[catch(default)]
 fn default(status: Status, req: &Request) -> String {

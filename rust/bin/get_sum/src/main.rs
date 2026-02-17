@@ -1,7 +1,7 @@
 mod sum;
 use crate::sum::get_sum;
 
-use std::io::{stdin, BufRead};
+use std::io::{BufRead, stdin};
 
 fn main() {
     let lines = stdin().lock().lines();

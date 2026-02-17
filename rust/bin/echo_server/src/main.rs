@@ -8,7 +8,7 @@ use crate::config::get_rocket_config;
 use crate::catchers::register_catchers;
 use crate::handlers::mount_handlers;
 
-use rocket::{launch, Build, Rocket};
+use rocket::{Build, Rocket, launch};
 
 #[launch]
 fn rocket() -> Rocket<Build> {

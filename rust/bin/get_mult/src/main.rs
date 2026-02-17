@@ -1,7 +1,7 @@
 mod mult;
 use crate::mult::get_mult;
 
-use std::io::{stdin, BufRead};
+use std::io::{BufRead, stdin};
 
 fn main() {
     let lines = stdin().lock().lines();

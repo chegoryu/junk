@@ -4,7 +4,7 @@ use itertools::join;
 use rocket::async_trait;
 use rocket::http::Header;
 use rocket::request::{FromRequest, Outcome};
-use rocket::{get, routes, Build, Request, Rocket};
+use rocket::{Build, Request, Rocket, get, routes};
 
 struct RequestHeaders<'r> {
     headers: Vec<Header<'r>>,
